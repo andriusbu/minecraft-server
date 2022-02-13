@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - minecraft-server/**
+      - versions
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  minecraft-server:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Enagle multiarch bulid
+      run: sudo podman run --rm --privileged docker.io/tonistiigi/binfmt --install all
+    
+    - name: Build arm64 container
+      run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-arm64 -a arm64
+    
+    - name: Build amd64 container
+      run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-amd64 -a amd64
+    
+    - name: Create manifest
+      run: |
+        podman manifest create \
+          ghcr.io/${{ github.repository }}:latest \
+          containers-storage:ghcr.io/${{ github.repository }}:latest-amd64 \
+          containers-storage:ghcr.io/${{ github.repository }}:latest-arm64
+    
+    - name: Container Registry Login
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ghcr.io/${{ github.actor }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push images
+      run: podman manifest push ghcr.io/${{ github.repository }}:latest ghcr.io/${{ github.repository }}:latest
+    
+      

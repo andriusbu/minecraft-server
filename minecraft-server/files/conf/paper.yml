@@ -1,0 +1,3 @@
+timings:
+  enabled: false
+  server-name: "%MC_SERVER_NAME%"

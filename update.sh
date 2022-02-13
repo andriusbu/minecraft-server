@@ -1,0 +1,28 @@
+#!/bin/sh
+
+DIRECTORY=`dirname "$0"`
+export $(grep -v '^#' ${DIRECTORY}/versions | xargs)
+
+UPDATED=0
+
+PAPERMC_LATEST_BUILD=$(curl --silent https://papermc.io/api/v2/projects/paper/versions/${PAPERMC_VERSION} | sed -n 's/.*"builds":\[.*,\([0-9]*\)\].*/\1/p')
+if [ "${PAPERMC_LATEST_BUILD}" -gt "${PAPERMC_BUILD}" ]; then
+    echo "PaperMC is being updated (current build: ${PAPERMC_BUILD}; latest build: ${PAPERMC_LATEST_BUILD})"
+    sed -i.bak "s/^\(PAPERMC_BUILD=\).*/\1${PAPERMC_LATEST_BUILD}/" ${DIRECTORY}/versions
+    UPDATED=1 
+fi
+
+GEYSERMC_LATEST_BUILD=$(curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/lastSuccessfulBuild/buildNumber)
+if [ "${GEYSERMC_LATEST_BUILD}" -gt "${GEYSERMC_BUILD}" ]; then
+    echo "GayserMC is being updated (current build: ${GEYSERMC_BUILD}; latest build: ${GEYSERMC_LATEST_BUILD})"
+    sed -i.bak "s/^\(GEYSERMC_BUILD=\).*/\1${GEYSERMC_LATEST_BUILD}/" ${DIRECTORY}/versions
+    UPDATED=1 
+fi
+
+FLOODGATE_LATEST_BIULD=$(curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/lastSuccessfulBuild/buildNumber)
+if [ "${FLOODGATE_LATEST_BIULD}" -gt "${FLOODGATE_BIULD}" ]; then
+    echo "Floodgate is being updated (current build: ${FLOODGATE_BIULD}; latest build: ${FLOODGATE_LATEST_BIULD})"
+    sed -i.bak "s/^\(FLOODGATE_BIULD=\).*/\1${FLOODGATE_LATEST_BIULD}/" ${DIRECTORY}/versions
+    UPDATED=1 
+fi
+
