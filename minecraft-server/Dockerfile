@@ -1,4 +1,10 @@
 ARG JDK_VERSION
+# Build mcrcon
+FROM docker.io/library/gcc:11 AS builder
+
+WORKDIR /build
+RUN git clone -c advice.detachedHead=false --depth 1 --branch v0.7.2 https://github.com/Tiiffi/mcrcon.git . && \
+    make
 
 #Alpine image version does not support arm64
 FROM docker.io/library/openjdk:${JDK_VERSION}
@@ -7,9 +13,11 @@ RUN mkdir -p \
     /opt/minecraft/plugins/Geyser-Spigot \
     /opt/minecraft/plugins/floodgate \
     /opt/minecraft/conf \
-    /opt/minecraft/work
+    /opt/minecraft/work \
+    /opt/minecraft/bin
 
 COPY files/ /opt/minecraft
+COPY --from=builder /build/mcrcon /opt/minecraft/bin/
 
 ARG PAPERMC_VERSION
 ARG PAPERMC_BUILD
@@ -28,6 +36,7 @@ ENV MC_MAX_PLAYERS=10
 ENV MC_RCON_ENABLE=false
 ENV MC_RCON_PASS=""
 
+ENV PATH=/opt/minecraft/bin:${PATH}
 WORKDIR /opt/minecraft/work
 USER 1000
 EXPOSE 25565/tcp 25575/tcp 19132/udp
