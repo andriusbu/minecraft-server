@@ -10,6 +10,7 @@ echo "eula=true" > /opt/minecraft/work/eula.txt
 sed -i "
     s/%MC_SERVER_NAME%/${MC_SERVER_NAME}/
     s/%MC_MAX_PLAYERS%/${MC_MAX_PLAYERS}/
+    s/%MC_RCON_ENABLE%/${MC_RCON_ENABLE}/
     s/%MC_RCON_PASS%/${MC_RCON_PASS}/" \
     ../conf/server.properties \
     ../conf/paper.yml \

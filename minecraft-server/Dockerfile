@@ -25,6 +25,7 @@ ENV MC_XMS=2g
 ENV MC_XMX=2g
 ENV MC_SERVER_NAME="Minecraft Server"
 ENV MC_MAX_PLAYERS=10
+ENV MC_RCON_ENABLE=false
 ENV MC_RCON_PASS=""
 
 WORKDIR /opt/minecraft/work
