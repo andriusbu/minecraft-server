@@ -3,7 +3,8 @@ ARG JDK_VERSION
 FROM docker.io/library/gcc:11 AS builder
 
 WORKDIR /build
-RUN git clone -c advice.detachedHead=false --depth 1 --branch v0.7.2 https://github.com/Tiiffi/mcrcon.git . && \
+ARG MCRCON_TAG
+RUN git clone -c advice.detachedHead=false --depth 1 --branch ${MCRCON_TAG} https://github.com/Tiiffi/mcrcon.git . && \
     make
 
 #Alpine image version does not support arm64

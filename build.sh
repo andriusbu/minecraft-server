@@ -61,4 +61,5 @@ podman build ${PODMAN_ARG}\
     --build-arg PAPERMC_BUILD=${PAPERMC_BUILD} \
     --build-arg GEYSERMC_BUILD=${GEYSERMC_BUILD} \
     --build-arg FLOODGATE_BIULD=${FLOODGATE_BIULD} \
+    --build-arg MCRCON_TAG=${MCRCON_TAG} \
     ${DIRECTORY}/minecraft-server/
