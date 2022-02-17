@@ -10,28 +10,19 @@ on:
   workflow_call:
 
 jobs:
-  minecraft-server:
-    runs-on: ubuntu-latest
 
+  build_arm64:
+    runs-on: ubuntu-latest
     steps:
+
     - name: Checkout repo
       uses: actions/checkout@v2
 
-    - name: Enagle multiarch bulid
+    - name: Enable multiarch bulid
       run: sudo podman run --rm --privileged docker.io/tonistiigi/binfmt --install all
     
     - name: Build arm64 container
       run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-arm64 -a arm64
-    
-    - name: Build amd64 container
-      run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-amd64 -a amd64
-    
-    - name: Create manifest
-      run: |
-        podman manifest create \
-          ghcr.io/${{ github.repository }}:latest \
-          containers-storage:ghcr.io/${{ github.repository }}:latest-amd64 \
-          containers-storage:ghcr.io/${{ github.repository }}:latest-arm64
     
     - name: Container Registry Login
       uses: redhat-actions/podman-login@v1
@@ -40,7 +31,48 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Push image
+      run: podman push ghcr.io/${{ github.repository }}:latest-arm64
+
+  build_amd64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    
+    - name: Build amd64 container
+      run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-amd64
+    
+    - name: Container Registry Login
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ghcr.io/${{ github.actor }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Push image
+      run: podman push ghcr.io/${{ github.repository }}:latest-amd64
+
+  manifest:
+    runs-on: ubuntu-latest
+    needs:
+    - build_arm64
+    - build_amd64
+    steps:
+
+    - name: Container Registry Login
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ghcr.io/${{ github.actor }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create manifest
+      run: |
+        podman manifest create \
+          ghcr.io/${{ github.repository }}:latest \
+          docker://ghcr.io/${{ github.repository }}:latest-amd64 \
+          docker://ghcr.io/${{ github.repository }}:latest-arm64
+
     - name: Push images
       run: podman manifest push ghcr.io/${{ github.repository }}:latest ghcr.io/${{ github.repository }}:latest
-    
-      
