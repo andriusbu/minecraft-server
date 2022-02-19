@@ -1,45 +1,42 @@
+# Build mcrcon from source
 ARG JDK_VERSION
-# Build mcrcon
 FROM docker.io/library/gcc:11 AS builder
 
 WORKDIR /build
+
+COPY files/ /app
+
 ARG MCRCON_TAG
 RUN git clone -c advice.detachedHead=false --depth 1 --branch ${MCRCON_TAG} https://github.com/Tiiffi/mcrcon.git . && \
-    make
-
-#Alpine image version does not support arm64
-FROM docker.io/library/openjdk:${JDK_VERSION}
-
-RUN mkdir -p \
-    /opt/minecraft/plugins/Geyser-Spigot \
-    /opt/minecraft/plugins/floodgate \
-    /opt/minecraft/conf \
-    /opt/minecraft/work \
-    /opt/minecraft/bin
-
-COPY files/ /opt/minecraft
-COPY --from=builder /build/mcrcon /opt/minecraft/bin/
+    make && \
+    mv mcrcon /app/bin/mcrcon
 
 ARG PAPERMC_VERSION
 ARG PAPERMC_BUILD
 ARG GEYSERMC_BUILD
 ARG FLOODGATE_BIULD
-ADD https://papermc.io/api/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar /opt/minecraft/paper.jar
-ADD https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/${GEYSERMC_BUILD}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar /opt/minecraft/plugins/geyser-spigot.jar
-ADD https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/63/artifact/spigot/target/floodgate-spigot.jar /opt/minecraft/plugins/floodgate-spigot.jar
+RUN mkdir -p /app/jars && \
+    curl --silent https://papermc.io/api/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar --output /app/jars/paper.jar && \
+    curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/${GEYSERMC_BUILD}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar --output /app/jars/geyser-spigot.jar && \
+    curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/63/artifact/spigot/target/floodgate-spigot.jar --output /app/jars/floodgate-spigot.jar
 
-RUN chmod -R g=u /opt/minecraft
+RUN chmod -R g=u /app
 
-ENV MC_XMS=2g
-ENV MC_XMX=2g
-ENV MC_SERVER_NAME="Minecraft Server"
-ENV MC_MAX_PLAYERS=10
-ENV MC_RCON_ENABLE=false
-ENV MC_RCON_PASS=""
+# Build Minecraft server container
+FROM  docker.io/library/openjdk:${JDK_VERSION}-slim
 
-ENV PATH=/opt/minecraft/bin:${PATH}
+COPY --from=builder /app/ /opt/minecraft
+
+ENV MC_XMS=2g \
+    MC_XMX=2g \
+    MC_SERVER_NAME="Minecraft Server" \
+    MC_MAX_PLAYERS=10 \
+    MC_RCON_ENABLE=false \
+    MC_RCON_PASS="" \
+    PATH=/opt/minecraft/bin:${PATH}
+
 WORKDIR /opt/minecraft/work
 USER 1000
 EXPOSE 25565/tcp 25575/tcp 19132/udp
 
-CMD [ "/bin/sh", "-c", "/opt/minecraft/start.sh" ]
+CMD [ "/bin/sh", "-c", "/opt/minecraft/bin/start.sh" ]
