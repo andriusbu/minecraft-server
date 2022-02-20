@@ -26,6 +26,13 @@ if [ "${FLOODGATE_LATEST_BIULD}" -gt "${FLOODGATE_BIULD}" ]; then
     UPDATED=1 
 fi
 
+MULTIVERSE_CORE_LATEST_BUILD=$(curl --silent https://ci.onarandombox.com/job/Multiverse-Core/lastSuccessfulBuild/buildNumber)
+if [ "${MULTIVERSE_CORE_LATEST_BUILD}" -gt "${MULTIVERSE_CORE_BUILD}" ]; then
+    echo "Multiverse core is being updated (current build: ${MULTIVERSE_CORE_BUILD}; latest build: ${MULTIVERSE_CORE_LATEST_BUILD})"
+    sed -i.bak "s/^\(MULTIVERSE_CORE_BUILD=\).*/\1${MULTIVERSE_CORE_LATEST_BUILD}/" ${DIRECTORY}/versions
+    UPDATED=1 
+fi
+
 MCRCON_LATEST_TAG=$(curl --silent https://api.github.com/repos/Tiiffi/mcrcon/releases/latest | sed -n 's/.*"tag_name":[[:space:]]*"\(.*\)".*/\1/p')
 if [ "${MCRCON_LATEST_TAG}" != "${MCRCON_TAG}" ]; then
     echo "MCRcon is being updated (current tag: ${MCRCON_TAG}; latest tag: ${MCRCON_LATEST_TAG})"
