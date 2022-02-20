@@ -18,7 +18,7 @@ ARG FLOODGATE_BIULD
 RUN mkdir -p /app/jars && \
     curl --silent https://papermc.io/api/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar --output /app/jars/paper.jar && \
     curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/${GEYSERMC_BUILD}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar --output /app/jars/geyser-spigot.jar && \
-    curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/63/artifact/spigot/target/floodgate-spigot.jar --output /app/jars/floodgate-spigot.jar
+    curl --silent https://ci.opencollab.dev/job/GeyserMC/job/Floodgate/job/master/${FLOODGATE_BIULD}/artifact/spigot/target/floodgate-spigot.jar --output /app/jars/floodgate-spigot.jar
 
 RUN chmod -R g=u /app
 
