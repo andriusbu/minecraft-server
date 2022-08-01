@@ -35,6 +35,7 @@ ENV MC_XMS=2g \
     MC_MAX_PLAYERS=10 \
     MC_RCON_ENABLE=false \
     MC_RCON_PASS="" \
+    MC_ENFORCE_SECURE_PROFILE=true \
     MC_MULTIVERSE_CORE_ENABLE= \
     PATH=/opt/minecraft/bin:${PATH}
 

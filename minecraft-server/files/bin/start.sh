@@ -22,12 +22,13 @@ sed -i "
     s/%MC_SERVER_NAME%/${MC_SERVER_NAME}/
     s/%MC_MAX_PLAYERS%/${MC_MAX_PLAYERS}/
     s/%MC_RCON_ENABLE%/${MC_RCON_ENABLE}/
-    s/%MC_RCON_PASS%/${MC_RCON_PASS}/" \
+    s/%MC_RCON_PASS%/${MC_RCON_PASS}/
+    s/%MC_ENFORCE_SECURE_PROFILE%/${MC_ENFORCE_SECURE_PROFILE}/" \
     /opt/minecraft/conf/server.properties \
     /opt/minecraft/conf/paper.yml \
     /opt/minecraft/plugins/Geyser-Spigot/config.yml \
     /opt/minecraft/plugins/floodgate/config.yml
-
+    
 exec java \
     -Xms${MC_XMS} -Xmx${MC_XMX} \
     -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions \
