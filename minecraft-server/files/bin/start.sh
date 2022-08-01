@@ -25,7 +25,7 @@ sed -i "
     s/%MC_RCON_PASS%/${MC_RCON_PASS}/
     s/%MC_ENFORCE_SECURE_PROFILE%/${MC_ENFORCE_SECURE_PROFILE}/" \
     /opt/minecraft/conf/server.properties \
-    /opt/minecraft/conf/paper.yml \
+    /opt/minecraft/conf/paper/paper-global.yml \
     /opt/minecraft/plugins/Geyser-Spigot/config.yml \
     /opt/minecraft/plugins/floodgate/config.yml
     
@@ -42,7 +42,7 @@ exec java \
     -S /opt/minecraft/conf/spigot.yml \
     -b /opt/minecraft/conf/bukkit.yml \
     -c /opt/minecraft/conf/server.properties \
-    --paper /opt/minecraft/conf/paper.yml \
+    --paper-settings-directory /opt/minecraft/conf/paper \
     --add-plugin /opt/minecraft/jars/geyser-spigot.jar \
     --add-plugin /opt/minecraft/jars/floodgate-spigot.jar \
     -P /opt/minecraft/plugins \
