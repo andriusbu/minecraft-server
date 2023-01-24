@@ -16,7 +16,7 @@ jobs:
     steps:
 
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Enable multiarch bulid
       run: sudo podman run --rm --privileged docker.io/tonistiigi/binfmt --install all
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     
     - name: Build amd64 container
       run: ./build.sh -r ghcr.io/${{ github.repository }} -t latest-amd64
