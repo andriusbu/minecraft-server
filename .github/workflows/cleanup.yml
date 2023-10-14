@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  update:
+  delete-old-images:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/delete-package-versions@v4
