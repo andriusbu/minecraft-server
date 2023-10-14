@@ -1,0 +1,17 @@
+name: Update
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+jobs:
+
+  update:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/delete-package-versions@v4
+      with: 
+        package-name: 'minecraft-server'
+        package-type: 'container'
+        min-versions-to-keep: 20
+        delete-only-untagged-versions: 'true'
