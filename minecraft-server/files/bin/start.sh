@@ -16,6 +16,10 @@ if [ -n "${MC_MULTIVERSE_CORE_ENABLE}" ]; then
     ln -s /opt/minecraft/work/Multiverse-Core /opt/minecraft/plugins/Multiverse-Core
 fi
 
+if [ -n "${MC_VIAVERSION_ENABLE}" ]; then
+    PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/ViaVersion.jar"
+fi
+
 # Update configuraion files
 echo "eula=true" > /opt/minecraft/work/eula.txt
 sed -i "
