@@ -45,3 +45,10 @@ if [ "${MCRCON_LATEST_TAG}" != "${MCRCON_TAG}" ]; then
     echo "MCRcon is being updated (current tag: ${MCRCON_TAG}; latest tag: ${MCRCON_LATEST_TAG})"
     sed -i.bak "s/^\(MCRCON_TAG=\).*/\1${MCRCON_LATEST_TAG}/" ${DIRECTORY}/versions
 fi
+
+VIAVERSION_LATEST_VERSION=$(curl --silent -fail https://api.github.com/repos/ViaVersion/ViaVersion/releases/latest | sed -n 's/.*"tag_name":[[:space:]]*"\(.*\)".*/\1/p')
+check_error "Failed to get ViaVersion latest version"
+if [ "${VIAVERSION_LATEST_VERSION}" != "${VIAVERSION_VERSION}" ]; then
+    echo "ViaVersion is being updated (current version: ${VIAVERSION_VERSION}; latest version: ${VIAVERSION_LATEST_VERSION})"
+    sed -i.bak "s/^\(VIAVERSION_VERSION=\).*/\1${VIAVERSION_LATEST_VERSION}/" ${DIRECTORY}/versions
+fi
