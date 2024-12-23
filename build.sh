@@ -64,6 +64,7 @@ podman build ${PODMAN_ARG}\
     --build-arg FLOODGATE_VERSION=${FLOODGATE_VERSION} \
     --build-arg FLOODGATE_BIULD=${FLOODGATE_BIULD} \
     --build-arg VIAVERSION_VERSION=${VIAVERSION_VERSION} \
-    --build-arg MULTIVERSE_CORE_BUILD=${MULTIVERSE_CORE_BUILD} \
     --build-arg MCRCON_TAG=${MCRCON_TAG} \
     ${DIRECTORY}/minecraft-server/
+
+    # --build-arg MULTIVERSE_CORE_BUILD=${MULTIVERSE_CORE_BUILD} \

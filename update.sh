@@ -32,12 +32,12 @@ if [ "${FLOODGATE_LATEST_BIULD}" -gt "${FLOODGATE_BIULD}" ]; then
     sed -i.bak "s/^\(FLOODGATE_BIULD=\).*/\1${FLOODGATE_LATEST_BIULD}/" ${DIRECTORY}/versions
 fi
 
-MULTIVERSE_CORE_LATEST_BUILD=$(curl --silent https://ci.onarandombox.com/job/Multiverse-Core/lastSuccessfulBuild/buildNumber)
-check_error "Failed to get Multiverse latest build number"
-if [ "${MULTIVERSE_CORE_LATEST_BUILD}" -gt "${MULTIVERSE_CORE_BUILD}" ]; then
-    echo "Multiverse core is being updated (current build: ${MULTIVERSE_CORE_BUILD}; latest build: ${MULTIVERSE_CORE_LATEST_BUILD})"
-    sed -i.bak "s/^\(MULTIVERSE_CORE_BUILD=\).*/\1${MULTIVERSE_CORE_LATEST_BUILD}/" ${DIRECTORY}/versions
-fi
+# MULTIVERSE_CORE_LATEST_BUILD=$(curl --silent https://ci.onarandombox.com/job/Multiverse-Core/lastSuccessfulBuild/buildNumber)
+# check_error "Failed to get Multiverse latest build number"
+# if [ "${MULTIVERSE_CORE_LATEST_BUILD}" -gt "${MULTIVERSE_CORE_BUILD}" ]; then
+#     echo "Multiverse core is being updated (current build: ${MULTIVERSE_CORE_BUILD}; latest build: ${MULTIVERSE_CORE_LATEST_BUILD})"
+#     sed -i.bak "s/^\(MULTIVERSE_CORE_BUILD=\).*/\1${MULTIVERSE_CORE_LATEST_BUILD}/" ${DIRECTORY}/versions
+# fi
 
 MCRCON_LATEST_TAG=$(curl --silent -fail https://api.github.com/repos/Tiiffi/mcrcon/releases/latest | sed -n 's/.*"tag_name":[[:space:]]*"\(.*\)".*/\1/p')
 check_error "Failed to get MCRcon latest build number"
