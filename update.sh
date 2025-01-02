@@ -11,7 +11,7 @@ check_error()
     fi
 }
 
-PAPERMC_LATEST_BUILD=$(curl --silent -fail https://papermc.io/api/v2/projects/paper/versions/${PAPERMC_VERSION} | sed -n 's/.*"builds":\[.*,\([0-9]*\)\].*/\1/p')
+PAPERMC_LATEST_BUILD=$(curl --silent -fail https://api.papermc.io/v2/projects/paper/versions/${PAPERMC_VERSION} | sed -n 's/.*"builds":\[.*,\([0-9]*\)\].*/\1/p')
 check_error "Failed to get PaperMC latest build number"
 if [ "${PAPERMC_LATEST_BUILD}" -gt "${PAPERMC_BUILD}" ]; then
     echo "PaperMC is being updated (current build: ${PAPERMC_BUILD}; latest build: ${PAPERMC_LATEST_BUILD})"
