@@ -60,3 +60,10 @@ if [ "${WORLDGUARD_LATEST_URL}" != "${WORLDGUARD_URL}" ]; then
     echo "WorldGuard is being updated (current url: ${WORLDGUARD_URL}; latest url: ${WORLDGUARD_LATEST_URL})"
     sed -i.bak "s#^\(WORLDGUARD_URL=\).*#\1${WORLDGUARD_LATEST_URL}#" ${DIRECTORY}/versions
 fi
+
+LUCKPERMS_LATEST_URL=$(curl --silent "https://api.modrinth.com/v2/project/luckperms/version" | jq -r --arg gv "${PAPERMC_VERSION}" '[.[] | select((.loaders | index("paper")) and (.game_versions | index($gv)) and .version_type == "release")] | .[0].files[] | select(.primary and (.filename // "" | endswith(".jar"))) | .url')
+check_error "Failed to get LuckPerms url"
+if [ "${LUCKPERMS_LATEST_URL}" != "${LUCKPERMS_URL}" ]; then
+    echo "LuckPerms is being updated (current url: ${LUCKPERMS_URL}; latest url: ${LUCKPERMS_LATEST_URL})"
+    sed -i.bak "s#^\(LUCKPERMS_URL=\).*#\1${LUCKPERMS_LATEST_URL}#" ${DIRECTORY}/versions
+fi

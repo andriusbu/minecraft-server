@@ -19,6 +19,10 @@ if [ -n "${MC_WORLD_GUARD_ENABLE}" ]; then
     PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/worldguard.jar"
 fi
 
+if [ -n "${MC_LUCKPERMS_ENABLE}" ]; then
+    PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/luckperms.jar"
+fi
+
 # Update configuraion files
 echo "eula=true" > /opt/minecraft/work/eula.txt
 sed -i "

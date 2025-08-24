@@ -19,6 +19,7 @@ ARG FLOODGATE_BIULD
 ARG VIAVERSION_VERSION
 ARG WORLDEDIT_URL
 ARG WORLDGUARD_URL
+ARG LUCKPERMS_URL
 
 RUN mkdir -p /app/jars
 RUN curl --silent https://api.papermc.io/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar --output /app/jars/paper.jar
@@ -27,6 +28,7 @@ RUN curl --silent https://download.geysermc.org/v2/projects/floodgate/versions/$
 RUN curl --silent --location https://github.com/ViaVersion/ViaVersion/releases/download/${VIAVERSION_VERSION}/ViaVersion-${VIAVERSION_VERSION}.jar --output /app/jars/ViaVersion.jar
 RUN curl --silent --location ${WORLDEDIT_URL} --output /app/jars/worldedit.jar
 RUN curl --silent --location ${WORLDGUARD_URL} --output /app/jars/worldguard.jar 
+RUN curl --silent --location ${LUCKPERMS_URL} --output /app/jars/luckperms.jar
   
 COPY files/ /app
 
@@ -46,9 +48,8 @@ ENV MC_XMS=2g \
     MC_ENFORCE_SECURE_PROFILE=true \
     MC_WORLD_EDIT_ENABLE=true \
     MC_WORLD_GUARD_ENABLE=true \
+    MC_LUCKPERMS_ENABLE=true \
     PATH=/opt/minecraft/bin:${PATH}
-    
-    # MC_MULTIVERSE_CORE_ENABLE= \
 
 WORKDIR /opt/minecraft/work
 USER 1000

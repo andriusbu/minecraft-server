@@ -67,4 +67,5 @@ podman build ${PODMAN_ARG}\
     --build-arg MCRCON_TAG=${MCRCON_TAG} \
     --build-arg WORLDEDIT_URL=${WORLDEDIT_URL} \
     --build-arg WORLDGUARD_URL=${WORLDGUARD_URL} \
+    --build-arg LUCKPERMS_URL=${LUCKPERMS_URL} \
     ${DIRECTORY}/minecraft-server/
