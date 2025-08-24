@@ -7,17 +7,16 @@ fi
 
 PLUGIN_ARGS=""
 
-# if [ -n "${MC_MULTIVERSE_CORE_ENABLE}" ]; then
-#     PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/Multiverse-Core.jar"
-#     if [ ! -d "/opt/minecraft/work/Multiverse-Core" ]; then
-#         mkdir "/opt/minecraft/work/Multiverse-Core"
-#         chmod g=u "/opt/minecraft/work/Multiverse-Core"
-#     fi
-#     ln -s /opt/minecraft/work/Multiverse-Core /opt/minecraft/plugins/Multiverse-Core
-# fi
-
 if [ -n "${MC_VIAVERSION_ENABLE}" ]; then
     PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/ViaVersion.jar"
+fi
+
+if [ -n "${MC_WORLD_EDIT_ENABLE}" ]; then
+    PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/worldedit.jar"
+fi
+
+if [ -n "${MC_WORLD_GUARD_ENABLE}" ]; then
+    PLUGIN_ARGS="${PLUGIN_ARGS} --add-plugin /opt/minecraft/jars/worldguard.jar"
 fi
 
 # Update configuraion files

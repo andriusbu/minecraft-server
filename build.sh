@@ -65,6 +65,6 @@ podman build ${PODMAN_ARG}\
     --build-arg FLOODGATE_BIULD=${FLOODGATE_BIULD} \
     --build-arg VIAVERSION_VERSION=${VIAVERSION_VERSION} \
     --build-arg MCRCON_TAG=${MCRCON_TAG} \
+    --build-arg WORLDEDIT_URL=${WORLDEDIT_URL} \
+    --build-arg WORLDGUARD_URL=${WORLDGUARD_URL} \
     ${DIRECTORY}/minecraft-server/
-
-    # --build-arg MULTIVERSE_CORE_BUILD=${MULTIVERSE_CORE_BUILD} \

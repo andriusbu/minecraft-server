@@ -4,11 +4,10 @@ FROM docker.io/library/gcc:11 AS builder
 
 WORKDIR /build
 
-COPY files/ /app
-
 ARG MCRCON_TAG
 RUN git clone -c advice.detachedHead=false --depth 1 --branch ${MCRCON_TAG} https://github.com/Tiiffi/mcrcon.git . && \
     make && \
+    mkdir -p /app/bin && \
     mv mcrcon /app/bin/mcrcon
 
 ARG PAPERMC_VERSION
@@ -18,15 +17,19 @@ ARG GEYSERMC_BUILD
 ARG FLOODGATE_VERSION
 ARG FLOODGATE_BIULD
 ARG VIAVERSION_VERSION
-# ARG MULTIVERSE_CORE_BUILD
-RUN mkdir -p /app/jars && \
-    curl --silent https://api.papermc.io/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar --output /app/jars/paper.jar && \
-    curl --silent https://download.geysermc.org/v2/projects/geyser/versions/${GEYSERMC_VERSION}/builds/${GEYSERMC_BUILD}/downloads/spigot --output /app/jars/geyser-spigot.jar && \
-    curl --silent https://download.geysermc.org/v2/projects/floodgate/versions/${FLOODGATE_VERSION}/builds/${FLOODGATE_BIULD}/downloads/spigot --output /app/jars/floodgate-spigot.jar && \
-    curl --silent --location https://github.com/ViaVersion/ViaVersion/releases/download/${VIAVERSION_VERSION}/ViaVersion-${VIAVERSION_VERSION}.jar --output /app/jars/ViaVersion.jar
+ARG WORLDEDIT_URL
+ARG WORLDGUARD_URL
 
-    # curl --silent https://ci.onarandombox.com/job/Multiverse-Core/${MULTIVERSE_CORE_BUILD}/artifact/target/Multiverse-Core-4.3.2-SNAPSHOT.jar  --output /app/jars/Multiverse-Core.jar && \
-    
+RUN mkdir -p /app/jars
+RUN curl --silent https://api.papermc.io/v2/projects/paper/versions/${PAPERMC_VERSION}/builds/${PAPERMC_BUILD}/downloads/paper-${PAPERMC_VERSION}-${PAPERMC_BUILD}.jar --output /app/jars/paper.jar
+RUN curl --silent https://download.geysermc.org/v2/projects/geyser/versions/${GEYSERMC_VERSION}/builds/${GEYSERMC_BUILD}/downloads/spigot --output /app/jars/geyser-spigot.jar
+RUN curl --silent https://download.geysermc.org/v2/projects/floodgate/versions/${FLOODGATE_VERSION}/builds/${FLOODGATE_BIULD}/downloads/spigot --output /app/jars/floodgate-spigot.jar
+RUN curl --silent --location https://github.com/ViaVersion/ViaVersion/releases/download/${VIAVERSION_VERSION}/ViaVersion-${VIAVERSION_VERSION}.jar --output /app/jars/ViaVersion.jar
+RUN curl --silent --location ${WORLDEDIT_URL} --output /app/jars/worldedit.jar
+RUN curl --silent --location ${WORLDGUARD_URL} --output /app/jars/worldguard.jar 
+  
+COPY files/ /app
+
 RUN chmod -R g=u /app
 
 # Build Minecraft server container
@@ -41,7 +44,8 @@ ENV MC_XMS=2g \
     MC_RCON_ENABLE=false \
     MC_RCON_PASS="" \
     MC_ENFORCE_SECURE_PROFILE=true \
-    MC_VIAVERSION_ENABLE= \
+    MC_WORLD_EDIT_ENABLE=true \
+    MC_WORLD_GUARD_ENABLE=true \
     PATH=/opt/minecraft/bin:${PATH}
     
     # MC_MULTIVERSE_CORE_ENABLE= \
