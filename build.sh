@@ -68,4 +68,5 @@ podman build ${PODMAN_ARG}\
     --build-arg WORLDEDIT_URL=${WORLDEDIT_URL} \
     --build-arg WORLDGUARD_URL=${WORLDGUARD_URL} \
     --build-arg LUCKPERMS_URL=${LUCKPERMS_URL} \
+    --build-arg MOJANG_URL=${MOJANG_URL} \
     ${DIRECTORY}/minecraft-server/

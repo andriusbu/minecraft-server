@@ -1,0 +1,3 @@
+enabled: true
+serverUuid: %MC_SERVER_UUID%
+logFailedRequests: false

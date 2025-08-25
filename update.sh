@@ -67,3 +67,10 @@ if [ "${LUCKPERMS_LATEST_URL}" != "${LUCKPERMS_URL}" ]; then
     echo "LuckPerms is being updated (current url: ${LUCKPERMS_URL}; latest url: ${LUCKPERMS_LATEST_URL})"
     sed -i.bak "s#^\(LUCKPERMS_URL=\).*#\1${LUCKPERMS_LATEST_URL}#" ${DIRECTORY}/versions
 fi
+
+MOJANG_LATEST_URL=$(curl --silent https://launchermeta.mojang.com/mc/game/version_manifest.json | jq -r --arg gv "${PAPERMC_VERSION}" '.versions[] | select(.type=="release" and .id==$gv) | .url' | xargs -I {} curl --silent {} | jq -r '.downloads.server.url')
+check_error "Failed to get Mojang latest url"
+if [ "${MOJANG_LATEST_URL}" != "${MOJANG_URL}" ]; then
+    echo "Mojang server jar is being updated (current url: ${MOJANG_URL}; latest url: ${MOJANG_LATEST_URL})"
+    sed -i.bak "s#^\(MOJANG_URL=\).*#\1${MOJANG_LATEST_URL}#" ${DIRECTORY}/versions
+fi
